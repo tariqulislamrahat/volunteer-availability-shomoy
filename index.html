@@ -311,16 +311,27 @@
         // DATA / STATE
         // ============================================
         const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
-        const timeSlots = [
-            "8:00 AM – 9:00 AM",
-            "9:00 AM – 10:00 AM",
-            "10:00 AM – 11:00 AM",
-            "11:00 AM – 12:00 PM",
-            "12:00 PM – 1:00 PM",
-            "1:00 PM – 2:00 PM",
-            "2:00 PM – 3:00 PM",
-            "3:00 PM – 4:00 PM",
-            "4:00 PM – 5:00 PM"
+        // start times (allowed selections) and end times (must be after start)
+        const startTimes = [
+            "8:00 AM",
+            "9:00 AM",
+            "10:00 AM",
+            "11:00 AM",
+            "12:00 PM",
+            "1:00 PM",
+            "2:00 PM",
+            "3:00 PM"
+        ];
+        const endTimes = [
+            "9:00 AM",
+            "10:00 AM",
+            "11:00 AM",
+            "12:00 PM",
+            "1:00 PM",
+            "2:00 PM",
+            "3:00 PM",
+            "4:00 PM",
+            "5:00 PM"
         ];
 
         let volunteersData = [];
@@ -476,27 +487,24 @@
         function renderStartEndButtons() {
             startTimeContainer.innerHTML = '';
             endTimeContainer.innerHTML = '';
-            // Start times: all slots except the last (8,9,...,3)
-            const startSlots = timeSlots.slice(0, timeSlots.length - 1);
-            // End times: all slots except the first (9,10,...,5)
-            const endSlots = timeSlots.slice(1);
-
-            startSlots.forEach(slot => {
-                const b1 = document.createElement('div');
-                b1.className = 'time-btn';
-                b1.textContent = slot;
-                b1.addEventListener('click', () => selectStart(slot));
-                if (selectedStart === slot) b1.classList.add('selected');
-                startTimeContainer.appendChild(b1);
+            // render start time buttons (single times)
+            startTimes.forEach(t => {
+                const b = document.createElement('div');
+                b.className = 'time-btn';
+                b.textContent = t;
+                b.addEventListener('click', () => selectStart(t));
+                if (selectedStart === t) b.classList.add('selected');
+                startTimeContainer.appendChild(b);
             });
 
-            endSlots.forEach(slot => {
-                const b2 = document.createElement('div');
-                b2.className = 'time-btn';
-                b2.textContent = slot;
-                b2.addEventListener('click', () => selectEnd(slot));
-                if (selectedEnd === slot) b2.classList.add('selected');
-                endTimeContainer.appendChild(b2);
+            // render end time buttons (single times)
+            endTimes.forEach(t => {
+                const b = document.createElement('div');
+                b.className = 'time-btn';
+                b.textContent = t;
+                b.addEventListener('click', () => selectEnd(t));
+                if (selectedEnd === t) b.classList.add('selected');
+                endTimeContainer.appendChild(b);
             });
         }
 
@@ -531,22 +539,17 @@
             applySelectionIfReady();
         }
 
-        function isEndAfterStart(startSlot, endSlot) {
-            if (!startSlot || !endSlot) return false;
-            const [sStart, sEnd] = startSlot.split(' – ');
-            const [eStart, eEnd] = endSlot.split(' – ');
-            // compare the actual start of end slot with start of start slot
-            return timeToMinutes(eEnd) > timeToMinutes(sStart);
+        function isEndAfterStart(startTime, endTime) {
+            if (!startTime || !endTime) return false;
+            return timeToMinutes(endTime) > timeToMinutes(startTime);
         }
 
         function applySelectionIfReady() {
             if (selectedDay && selectedStart && selectedEnd) {
-                // combine to a continuous period: start = startSlot start time, end = endSlot end time
-                const startTime = selectedStart.split(' – ')[0];
-                const endTime = selectedEnd.split(' – ')[1];
-                selectedSlotText.textContent = `${selectedDay}, ${startTime} – ${endTime}`;
+                // start/end are single times now
+                selectedSlotText.textContent = `${selectedDay}, ${selectedStart} – ${selectedEnd}`;
                 selectedSlotInfo.style.display = 'block';
-                findAvailableVolunteersForRange(selectedDay, startTime, endTime);
+                findAvailableVolunteersForRange(selectedDay, selectedStart, selectedEnd);
             } else {
                 availableVolunteers = [];
                 renderVolunteersList();
@@ -737,8 +740,8 @@
                         classSlot.className = 'class-slot';
                         classSlot.textContent = classTime;
                         if (selectedDay === day && selectedStart && selectedEnd) {
-                            const startTime = selectedStart.split(' – ')[0];
-                            const endTime = selectedEnd.split(' – ')[1];
+                            const startTime = selectedStart;
+                            const endTime = selectedEnd;
                             const [classStart, classEnd] = classTime.split(' – ');
                             if (timeRangesOverlap(startTime, endTime, classStart, classEnd)) {
                                 classSlot.style.backgroundColor = '#fef3c7';
@@ -776,7 +779,7 @@
                 </head>
                 <body>
                     <h3>Volunteer List${selectedDay ? ' — ' + selectedDay : ''}</h3>
-                    <p>Period: ${selectedStart && selectedEnd ? `${selectedStart.split(' – ')[0]} – ${selectedEnd.split(' – ')[1]}` : 'Not specified'}</p>
+                    <p>Period: ${selectedStart && selectedEnd ? `${selectedStart} – ${selectedEnd}` : 'Not specified'}</p>
                     <table>
                         <thead><tr><th>Name</th><th>ID</th><th>Phone</th></tr></thead>
                         <tbody>
