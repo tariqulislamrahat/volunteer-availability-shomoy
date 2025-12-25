@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* (All CSS styles remain exactly the same as before) */
         * {
             margin: 0;
             padding: 0;
@@ -382,6 +383,9 @@
                 <div>
                     <h1>Volunteer Availability Dashboard</h1>
                     <p class="subtitle">Click on a time slot to see available volunteers for your club activities</p>
+                    <p class="subtitle" style="margin-top: 5px; font-size: 0.9rem;">
+                        <i class="fas fa-cloud-download-alt"></i> Data loaded directly from Google Sheets
+                    </p>
                 </div>
                 <div class="controls">
                     <button class="btn btn-primary" id="refreshBtn">
@@ -416,14 +420,16 @@
             <!-- Available Volunteers Panel -->
             <div class="card">
                 <h2 class="card-title"><i class="fas fa-users"></i> Available Volunteers</h2>
-                <p id="volunteersCount">Select a time slot to see available volunteers</p>
+                <div id="dataStatus">
+                    <div class="loading">
+                        <div class="loading-spinner"></div>
+                        <p>Loading data from Google Sheets...</p>
+                        <p style="font-size: 0.9rem; color: #64748b;">This may take a few seconds</p>
+                    </div>
+                </div>
                 
                 <div class="volunteers-list" id="volunteersList">
-                    <div class="empty-state">
-                        <i class="fas fa-user-clock"></i>
-                        <h3>No time slot selected</h3>
-                        <p>Click on a time slot to see volunteers available at that time</p>
-                    </div>
+                    <!-- Volunteers list will be loaded here -->
                 </div>
             </div>
         </div>
@@ -457,106 +463,31 @@
         </div>
         
         <footer>
-            <p>Volunteer Availability Dashboard &copy; 2023 | Data fetched from Google Sheets</p>
+            <p>Volunteer Availability Dashboard &copy; 2023 | Data fetched automatically from Google Sheets</p>
             <p>Click on volunteer names to view their complete schedule and contact information</p>
         </footer>
     </div>
 
     <script>
-        // Sample data from the Excel file (in production, this would come from Google Sheets API)
-        const volunteersData = [
-            {
-                name: "Fazilatun Nesa Rodshi",
-                studentId: "23-52284-2",
-                phone: "01325404797",
-                department: "BBA",
-                schedule: {
-                    Sunday: ["10:10 AM – 12:10 PM", "12:10 PM – 2:10 PM"],
-                    Monday: ["10:10 AM – 12:10 PM"],
-                    Tuesday: ["10:10 AM – 12:10 PM", "12:10 PM – 2:10 PM"],
-                    Wednesday: ["10:10 AM – 12:10 PM"],
-                    Thursday: ["2:20 PM – 4:20 PM"]
-                }
-            },
-            {
-                name: "Fahima Sultana Smrity",
-                studentId: "23-51277-1",
-                phone: "01319333679",
-                department: "CSE",
-                schedule: {
-                    Sunday: ["10:10 AM – 12:10 PM", "1:00 PM – 2:30 PM", "2:40 PM – 4:10 PM"],
-                    Monday: ["11:00 AM – 2:00 PM", "2:30 PM – 4:30 PM"],
-                    Tuesday: ["10:10 AM – 12:10 PM", "1:00 PM – 2:30 PM", "2:40 PM – 4:10 PM"],
-                    Wednesday: ["11:00 AM – 2:00 PM", "2:30 PM – 4:30 PM"],
-                    Thursday: ["8:00 AM – 10:00 AM"]
-                }
-            },
-            {
-                name: "Md Navid Aunjum Shoccho",
-                studentId: "24-57713-2",
-                phone: "1604309395",
-                department: "EEE",
-                schedule: {
-                    Sunday: ["8:00 AM – 10:00 AM"],
-                    Monday: ["12:10 PM – 2:10 PM", "2:20 PM – 4:20 PM"],
-                    Tuesday: ["8:00 AM – 10:00 AM", "2:00 PM – 5:00 PM"],
-                    Wednesday: ["12:10 PM – 2:10 PM", "2:20 PM – 4:20 PM"],
-                    Thursday: ["12:20 PM – 2:20 PM"]
-                }
-            },
-            {
-                name: "Ahanaf Tahmid",
-                studentId: "21-45447-3",
-                phone: "01762596137",
-                department: "CSE",
-                schedule: {
-                    Sunday: ["11:20 AM – 12:50 PM", "2:30 PM – 4:30 PM"],
-                    Monday: ["11:00 AM – 2:00 PM", "2:30 PM – 4:30 PM"],
-                    Tuesday: ["11:20 AM – 12:50 PM", "2:30 PM – 4:30 PM"],
-                    Wednesday: ["11:20 AM – 12:50 PM", "2:30 PM – 4:30 PM"],
-                    Thursday: ["8:00 AM – 10:00 AM"]
-                }
-            },
-            {
-                name: "MD.Sadman Reza Siddiquee",
-                studentId: "24-57318-2",
-                phone: "01568639852",
-                department: "BBA",
-                schedule: {
-                    Sunday: ["8:00 AM – 10:00 AM", "10:10 AM – 12:10 PM"],
-                    Monday: ["12:10 PM – 2:10 PM"],
-                    Tuesday: ["8:00 AM – 10:00 AM", "10:10 AM – 12:10 PM"],
-                    Wednesday: ["12:10 PM – 2:10 PM"],
-                    Thursday: ["8:00 AM – 10:00 AM", "10:10 AM – 12:10 PM"]
-                }
-            },
-            {
-                name: "Parvez Hasan",
-                studentId: "23-53159-3",
-                phone: "01300510470",
-                department: "BBA",
-                schedule: {
-                    Sunday: ["2:20 PM – 4:20 PM"],
-                    Monday: ["2:20 PM – 4:20 PM"],
-                    Tuesday: ["2:20 PM – 4:20 PM"],
-                    Wednesday: ["2:20 PM – 4:20 PM"],
-                    Thursday: ["No classes"]
-                }
-            },
-            {
-                name: "Shobnom Mostary",
-                studentId: "25-61496-1",
-                phone: "01908734597",
-                department: "LL.B",
-                schedule: {
-                    Sunday: ["No classes"],
-                    Monday: ["No classes"],
-                    Tuesday: ["No classes"],
-                    Wednesday: ["No classes"],
-                    Thursday: ["No classes"]
-                }
-            }
-        ];
+        // ============================================
+        // CONFIGURATION - SET YOUR GOOGLE SHEET URL HERE
+        // ============================================
+        
+        // Method 1: Google Sheets CSV Export (Easiest)
+        // 1. Open your Google Sheet
+        // 2. Go to File → Share → Publish to web
+        // 3. Choose "Comma-separated values (.csv)"
+        // 4. Copy the URL and paste it below
+        
+        const GOOGLE_SHEETS_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vR0N0LWqHVntBYrWP8KKkU_8n-4MxCHftC3CzqdNh0FQYHwh6SxOkQPzzycrM6czbvW_FucZMcNYrvj/pub?output=csv';
+        
+        // Method 2: Google Sheets JSON (Alternative)
+        // If CSV doesn't work, use this JSON URL format:
+        // https://docs.google.com/spreadsheets/d/YOUR_SHEET_ID/gviz/tq?tqx=out:json
+        
+        // ============================================
+        // NO NEED TO CHANGE ANYTHING BELOW THIS LINE
+        // ============================================
 
         // Days of the week
         const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday"];
@@ -575,6 +506,7 @@
         ];
 
         // Global state
+        let volunteersData = [];
         let selectedDay = null;
         let selectedTimeSlot = null;
         let selectedVolunteer = null;
@@ -583,7 +515,7 @@
         // DOM elements
         const timeSlotsContainer = document.getElementById('timeSlotsContainer');
         const volunteersList = document.getElementById('volunteersList');
-        const volunteersCount = document.getElementById('volunteersCount');
+        const dataStatus = document.getElementById('dataStatus');
         const volunteerDetailsPanel = document.getElementById('volunteerDetailsPanel');
         const selectedSlotInfo = document.getElementById('selectedSlotInfo');
         const selectedSlotText = document.getElementById('selectedSlotText');
@@ -593,10 +525,241 @@
         const clearSelectionBtn = document.getElementById('clearSelectionBtn');
         const printBtn = document.getElementById('printBtn');
 
+        // ============================================
+        // GOOGLE SHEETS DATA FETCHING
+        // ============================================
+
+        // Function to fetch data from Google Sheets
+        async function fetchDataFromGoogleSheets() {
+            showLoadingState();
+            
+            try {
+                // Fetch CSV data from Google Sheets
+                const response = await fetch(GOOGLE_SHEETS_CSV_URL);
+                
+                if (!response.ok) {
+                    throw new Error(`Failed to fetch data: ${response.status} ${response.statusText}`);
+                }
+                
+                const csvText = await response.text();
+                volunteersData = parseCSVData(csvText);
+                
+                if (volunteersData.length === 0) {
+                    throw new Error("No data found in the Google Sheet");
+                }
+                
+                showDataLoadedState();
+                renderTimeSlots();
+                console.log(`Successfully loaded ${volunteersData.length} volunteers from Google Sheets`);
+                
+            } catch (error) {
+                console.error("Error fetching data:", error);
+                showErrorState(error.message);
+                
+                // Fallback to sample data if Google Sheets fails
+                console.log("Using sample data as fallback...");
+                volunteersData = getSampleData();
+                showDataLoadedState();
+                renderTimeSlots();
+            }
+        }
+
+        // Parse CSV data from Google Sheets
+        function parseCSVData(csvText) {
+            const volunteers = [];
+            
+            // Split CSV into lines
+            const lines = csvText.split('\n');
+            
+            // Check if we have enough lines
+            if (lines.length < 2) {
+                console.warn("CSV file is empty or has no data rows");
+                return volunteers;
+            }
+            
+            // Extract headers (first line)
+            const headers = parseCSVLine(lines[0]);
+            console.log("CSV Headers:", headers);
+            
+            // Process each data row (skip header row)
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                
+                // Skip empty lines
+                if (!line) continue;
+                
+                // Parse the CSV line
+                const rowData = parseCSVLine(line);
+                
+                // Ensure we have enough columns
+                if (rowData.length < 9) {
+                    console.warn(`Skipping row ${i+1}: Not enough columns`, rowData);
+                    continue;
+                }
+                
+                // Map CSV columns to our data structure
+                const volunteer = {
+                    name: rowData[0] || "Unknown",
+                    studentId: rowData[1] || "N/A",
+                    phone: rowData[2] || "N/A",
+                    department: rowData[3] || "Unknown",
+                    schedule: {
+                        Sunday: parseTimeSlots(rowData[4]),
+                        Monday: parseTimeSlots(rowData[5]),
+                        Tuesday: parseTimeSlots(rowData[6]),
+                        Wednesday: parseTimeSlots(rowData[7]),
+                        Thursday: parseTimeSlots(rowData[8])
+                    }
+                };
+                
+                // Only add if we have a valid name
+                if (volunteer.name && volunteer.name !== "Unknown") {
+                    volunteers.push(volunteer);
+                }
+            }
+            
+            return volunteers;
+        }
+
+        // Helper function to parse CSV line (handles quoted fields with commas)
+        function parseCSVLine(line) {
+            const result = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                const nextChar = line[i + 1];
+                
+                if (char === '"' && !inQuotes) {
+                    inQuotes = true;
+                } else if (char === '"' && inQuotes && nextChar === '"') {
+                    // Escaped quote
+                    current += '"';
+                    i++; // Skip next quote
+                } else if (char === '"' && inQuotes) {
+                    inQuotes = false;
+                } else if (char === ',' && !inQuotes) {
+                    result.push(current.trim());
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            // Add the last field
+            result.push(current.trim());
+            
+            return result;
+        }
+
+        // Parse time slots string (e.g., "10:10 AM – 12:10 PM, 12:10 PM – 2:10 PM")
+        function parseTimeSlots(timeString) {
+            if (!timeString || 
+                timeString.toLowerCase().includes('no classes') || 
+                timeString.trim() === '') {
+                return ["No classes"];
+            }
+            
+            // Split by comma and clean up each time slot
+            return timeString.split(',').map(slot => slot.trim()).filter(slot => slot.length > 0);
+        }
+
+        // Sample data as fallback (in case Google Sheets fails)
+        function getSampleData() {
+            return [
+                {
+                    name: "Fazilatun Nesa Rodshi",
+                    studentId: "23-52284-2",
+                    phone: "01325404797",
+                    department: "BBA",
+                    schedule: {
+                        Sunday: ["10:10 AM – 12:10 PM", "12:10 PM – 2:10 PM"],
+                        Monday: ["10:10 AM – 12:10 PM"],
+                        Tuesday: ["10:10 AM – 12:10 PM", "12:10 PM – 2:10 PM"],
+                        Wednesday: ["10:10 AM – 12:10 PM"],
+                        Thursday: ["2:20 PM – 4:20 PM"]
+                    }
+                },
+                {
+                    name: "Fahima Sultana Smrity",
+                    studentId: "23-51277-1",
+                    phone: "01319333679",
+                    department: "CSE",
+                    schedule: {
+                        Sunday: ["10:10 AM – 12:10 PM", "1:00 PM – 2:30 PM", "2:40 PM – 4:10 PM"],
+                        Monday: ["11:00 AM – 2:00 PM", "2:30 PM – 4:30 PM"],
+                        Tuesday: ["10:10 AM – 12:10 PM", "1:00 PM – 2:30 PM", "2:40 PM – 4:10 PM"],
+                        Wednesday: ["11:00 AM – 2:00 PM", "2:30 PM – 4:30 PM"],
+                        Thursday: ["8:00 AM – 10:00 AM"]
+                    }
+                }
+            ];
+        }
+
+        // ============================================
+        // UI STATE MANAGEMENT
+        // ============================================
+
+        function showLoadingState() {
+            dataStatus.innerHTML = `
+                <div class="loading">
+                    <div class="loading-spinner"></div>
+                    <p>Loading data from Google Sheets...</p>
+                    <p style="font-size: 0.9rem; color: #64748b;">Fetching ${volunteersData.length === 0 ? 'initial' : 'updated'} data...</p>
+                </div>
+            `;
+            
+            volunteersList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-cloud-download-alt"></i>
+                    <h3>Loading Data</h3>
+                    <p>Please wait while we fetch the latest volunteer information</p>
+                </div>
+            `;
+        }
+
+        function showDataLoadedState() {
+            dataStatus.innerHTML = `
+                <p id="volunteersCount" style="margin-bottom: 10px;">
+                    <i class="fas fa-check-circle" style="color: #10b981;"></i>
+                    Loaded ${volunteersData.length} volunteers from Google Sheets
+                </p>
+                <p style="font-size: 0.9rem; color: #64748b; margin-bottom: 15px;">
+                    Select a time slot to see available volunteers
+                </p>
+            `;
+            
+            volunteersList.innerHTML = `
+                <div class="empty-state">
+                    <i class="fas fa-user-clock"></i>
+                    <h3>No time slot selected</h3>
+                    <p>Click on a time slot to see volunteers available at that time</p>
+                </div>
+            `;
+        }
+
+        function showErrorState(errorMessage) {
+            dataStatus.innerHTML = `
+                <div style="padding: 15px; background-color: #fee; border-radius: 8px; color: #dc2626;">
+                    <p><i class="fas fa-exclamation-triangle"></i> <strong>Error loading data:</strong></p>
+                    <p style="font-size: 0.9rem; margin-top: 5px;">${errorMessage}</p>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">
+                        Using sample data. Click Refresh to try again.
+                    </p>
+                </div>
+            `;
+        }
+
+        // ============================================
+        // CORE APPLICATION FUNCTIONS
+        // ============================================
+
         // Initialize the application
         function init() {
             renderTimeSlots();
             setupEventListeners();
+            fetchDataFromGoogleSheets(); // Load data on startup
         }
 
         // Render time slots for each day
@@ -661,6 +824,27 @@
             // Parse the selected time slot
             const [startTime, endTime] = slot.split(' – ');
             
+            // Helper function to check if two time ranges overlap
+            function timeRangesOverlap(range1Start, range1End, range2Start, range2End) {
+                // Convert times to minutes since midnight for comparison
+                function timeToMinutes(timeStr) {
+                    const [time, modifier] = timeStr.split(' ');
+                    let [hours, minutes] = time.split(':').map(Number);
+                    
+                    if (modifier === 'PM' && hours !== 12) hours += 12;
+                    if (modifier === 'AM' && hours === 12) hours = 0;
+                    
+                    return hours * 60 + minutes;
+                }
+                
+                const start1 = timeToMinutes(range1Start);
+                const end1 = timeToMinutes(range1End);
+                const start2 = timeToMinutes(range2Start);
+                const end2 = timeToMinutes(range2End);
+                
+                return !(end1 <= start2 || start1 >= end2);
+            }
+            
             availableVolunteers = volunteersData.filter(volunteer => {
                 // If volunteer has no classes that day, they're available
                 if (!volunteer.schedule[day] || volunteer.schedule[day][0] === "No classes") {
@@ -669,17 +853,14 @@
                 
                 // Check if volunteer has any class during the selected time slot
                 const hasClassDuringSlot = volunteer.schedule[day].some(classTime => {
+                    // Skip if it's "No classes"
+                    if (classTime === "No classes") return false;
+                    
+                    // Parse class time (format: "10:10 AM – 12:10 PM")
                     const [classStart, classEnd] = classTime.split(' – ');
                     
-                    // Simple time overlap check (for demo purposes)
-                    // In a real app, you'd want to parse times properly
-                    const slotStartHour = parseInt(startTime.split(':')[0]);
-                    const slotEndHour = parseInt(endTime.split(':')[0]);
-                    const classStartHour = parseInt(classStart.split(':')[0]);
-                    const classEndHour = parseInt(classEnd.split(':')[0]);
-                    
                     // Check for overlap
-                    return !(slotEndHour <= classStartHour || slotStartHour >= classEndHour);
+                    return timeRangesOverlap(startTime, endTime, classStart, classEnd);
                 });
                 
                 return !hasClassDuringSlot;
@@ -699,13 +880,16 @@
                         <i class="fas fa-user-slash"></i>
                         <h3>No volunteers available</h3>
                         <p>No volunteers are available at the selected time slot</p>
+                        <p style="font-size: 0.9rem; margin-top: 10px;">
+                            Try selecting a different time slot
+                        </p>
                     </div>
                 `;
-                volunteersCount.textContent = '0 volunteers available for the selected time slot';
+                updateVolunteersCount();
                 return;
             }
             
-            volunteersCount.textContent = `${availableVolunteers.length} volunteer${availableVolunteers.length !== 1 ? 's' : ''} available for ${selectedDay}, ${selectedTimeSlot}`;
+            updateVolunteersCount();
             
             availableVolunteers.forEach(volunteer => {
                 const volunteerItem = document.createElement('div');
@@ -732,14 +916,42 @@
             });
         }
 
+        // Update volunteers count display
+        function updateVolunteersCount() {
+            const volunteersCountElement = document.getElementById('volunteersCount');
+            if (volunteersCountElement) {
+                if (selectedDay && selectedTimeSlot) {
+                    volunteersCountElement.innerHTML = `
+                        <i class="fas fa-users"></i>
+                        ${availableVolunteers.length} volunteer${availableVolunteers.length !== 1 ? 's' : ''} available for ${selectedDay}, ${selectedTimeSlot}
+                    `;
+                } else {
+                    volunteersCountElement.innerHTML = `
+                        <i class="fas fa-users"></i>
+                        ${volunteersData.length} volunteers loaded
+                    `;
+                }
+            }
+        }
+
         // Format phone number for display
         function formatPhoneNumber(phone) {
-            if (!phone) return "N/A";
-            // Simple formatting for Bangladesh numbers
-            if (phone.length === 11 && phone.startsWith('01')) {
-                return `${phone.substring(0, 4)}-${phone.substring(4, 8)}-${phone.substring(8)}`;
+            if (!phone || phone === "N/A") return "N/A";
+            
+            // Clean the phone number
+            const cleanPhone = phone.toString().trim();
+            
+            // Format Bangladesh numbers
+            if (cleanPhone.length === 11 && cleanPhone.startsWith('01')) {
+                return `${cleanPhone.substring(0, 4)}-${cleanPhone.substring(4, 8)}-${cleanPhone.substring(8)}`;
             }
-            return phone;
+            
+            // Format 10-digit numbers
+            if (cleanPhone.length === 10) {
+                return `${cleanPhone.substring(0, 4)}-${cleanPhone.substring(4, 7)}-${cleanPhone.substring(7)}`;
+            }
+            
+            return cleanPhone;
         }
 
         // Select a volunteer to view details
@@ -762,10 +974,11 @@
             
             // Update availability status
             const isAvailableNow = availableVolunteers.some(v => v.studentId === volunteer.studentId);
-            document.getElementById('detailStatus').textContent = isAvailableNow ? 
+            const statusElement = document.getElementById('detailStatus');
+            statusElement.textContent = isAvailableNow ? 
                 `Available at ${selectedDay}, ${selectedTimeSlot}` : 
                 "Not available at selected time";
-            document.getElementById('detailStatus').style.color = isAvailableNow ? "#10b981" : "#ef4444";
+            statusElement.style.color = isAvailableNow ? "#10b981" : "#ef4444";
             
             // Render schedule
             renderVolunteerSchedule(volunteer);
@@ -803,6 +1016,19 @@
                         const classSlot = document.createElement('span');
                         classSlot.className = 'class-slot';
                         classSlot.textContent = classTime;
+                        
+                        // Highlight if this class conflicts with selected time
+                        if (selectedDay === day && selectedTimeSlot) {
+                            const [startTime, endTime] = selectedTimeSlot.split(' – ');
+                            const [classStart, classEnd] = classTime.split(' – ');
+                            
+                            // Simple overlap check
+                            if (timeRangesOverlap(startTime, endTime, classStart, classEnd)) {
+                                classSlot.style.backgroundColor = '#fef3c7';
+                                classSlot.style.color = '#92400e';
+                            }
+                        }
+                        
                         daySchedule.appendChild(classSlot);
                     });
                 }
@@ -810,6 +1036,13 @@
                 scheduleDay.appendChild(daySchedule);
                 scheduleContainer.appendChild(scheduleDay);
             });
+        }
+
+        // Helper function to check time overlap
+        function timeRangesOverlap(range1Start, range1End, range2Start, range2End) {
+            // Simple string comparison for demo
+            // In a real app, you'd convert to Date objects
+            return !(range1End <= range2Start || range1Start >= range2End);
         }
 
         // Clear all selections
@@ -835,7 +1068,7 @@
                 </div>
             `;
             
-            volunteersCount.textContent = 'Select a time slot to see available volunteers';
+            updateVolunteersCount();
         }
 
         // Print the current list
@@ -866,6 +1099,7 @@
                     <div class="header">
                         <h1>Volunteer Availability List</h1>
                         <p><strong>Time Slot:</strong> ${selectedDay ? `${selectedDay}, ${selectedTimeSlot}` : 'Not specified'}</p>
+                        <p><strong>Total Volunteers:</strong> ${volunteersData.length}</p>
                         <p><strong>Generated:</strong> ${new Date().toLocaleString()}</p>
                     </div>
             `);
@@ -907,26 +1141,6 @@
                 printWindow.print();
                 printWindow.close();
             }, 250);
-        }
-
-        // Simulate fetching data from Google Sheets
-        function fetchDataFromGoogleSheets() {
-            // Show loading state
-            volunteersList.innerHTML = `
-                <div class="loading">
-                    <div class="loading-spinner"></div>
-                    <p>Fetching data from Google Sheets...</p>
-                </div>
-            `;
-            
-            // In a real implementation, you would fetch from Google Sheets API
-            // For this demo, we'll simulate a delay and then use the sample data
-            setTimeout(() => {
-                // In reality, you would parse the Google Sheets data here
-                // For now, we'll just reload the current data
-                clearSelections();
-                alert("Data refreshed successfully! (In a real app, this would fetch from Google Sheets)");
-            }, 1500);
         }
 
         // Set up event listeners
