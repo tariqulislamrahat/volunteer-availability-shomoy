@@ -196,9 +196,42 @@
             .card { box-shadow: none; border: 1px solid #ddd; }
             .time-slots, .volunteers-list { max-height: none; overflow: visible; }
         }
+
+        /* Login overlay styles */
+        #loginOverlay { backdrop-filter: blur(4px); }
+        .login-card { width: 360px; max-width: calc(100% - 40px); background: linear-gradient(180deg,#ffffff 0%, #fbfdff 100%); padding:22px;border-radius:14px;box-shadow:0 20px 50px rgba(2,6,23,0.35); border:1px solid rgba(74,110,224,0.08); }
+        .login-title { margin:0 0 6px 0; font-size:1.25rem; color:#0f172a; font-weight:700; }
+        .login-sub { margin:0 0 12px 0; color:#475569; font-size:0.95rem; }
+        .login-input { width:100%; padding:12px; margin:8px 0 12px 0; border-radius:10px; border:1px solid #e6eef8; font-size:0.95rem; }
+        .login-row { display:flex; gap:10px; justify-content:flex-end; margin-top:6px; }
+        .login-small { font-size:0.85rem; color:#475569; }
+        @media (max-width:420px) { .login-card{padding:16px} .login-title{font-size:1.1rem} }
     </style>
 </head>
 <body>
+    <!-- Login overlay: placed before main app so it blocks UI until successful login -->
+    <div id="loginOverlay" style="position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,11,13,0.45);z-index:9999;">
+        <div class="login-card" role="dialog" aria-modal="true" aria-label="Login dialog">
+            <h2 class="login-title">Welcome back</h2>
+            <p class="login-sub">Sign in to continue to the Volunteer Availability Dashboard — access is protected by SHA-256 hashes stored in the file.</p>
+
+            <label class="login-small" for="loginUsername">Username</label>
+            <input id="loginUsername" type="text" class="login-input" placeholder="teamleader">
+
+            <label class="login-small" for="loginPassword">Password</label>
+            <input id="loginPassword" type="password" class="login-input" placeholder="••••••••••">
+
+            <div class="login-row">
+                <button id="loginBtn" class="btn btn-primary" style="padding:10px 16px;border-radius:10px">Sign In</button>
+            </div>
+
+            <div id="loginMsg" style="margin-top:12px;color:#b91c1c;font-size:0.95rem;display:none"></div>
+
+            <hr style="margin:14px 0;border:none;border-top:1px solid #eef2ff">
+            <div class="login-small">Enter your credentials to sign in.</div>
+        </div>
+    </div>
+
     <div class="container">
         <header>
             <div class="header-content">
@@ -867,6 +900,107 @@
         }
 
         document.addEventListener('DOMContentLoaded', init);
+    </script>
+
+    <!-- Client-side login & hash helper (replace placeholders below with your generated hashes) -->
+    <script>
+        // === PLACE YOUR HASHES HERE ===
+        // The hashes are embedded below for the expected credentials.
+        // Hashes for provided credentials:
+        // username: teamleader  (lowercased before hashing)
+        // password: shomoyleader
+        const STORED_USER = 'a13ced332eef4dd59a416acfcecb808765f4e1ca745f7477dfcd580eac113599';
+        const STORED_PASS = '78b5d26ad5c8e3349f5d61dc46b30d23a85524f0da0ea169d0537d026ea1d222';
+
+        // Convert text -> SHA-256 hex string
+        // Uses Web Crypto when available; otherwise dynamically loads CryptoJS as a fallback.
+        async function sha256hex(text) {
+            if (window.crypto && window.crypto.subtle && typeof window.crypto.subtle.digest === 'function') {
+                const enc = new TextEncoder();
+                const data = enc.encode(text);
+                const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+                const hashArray = Array.from(new Uint8Array(hashBuffer));
+                return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+            }
+
+            // Fallback: use CryptoJS if already present
+            if (window.CryptoJS && typeof window.CryptoJS.SHA256 === 'function') {
+                return window.CryptoJS.SHA256(text).toString(window.CryptoJS.enc.Hex);
+            }
+
+            // Dynamically load CryptoJS from CDN as a fallback (only if needed)
+            await new Promise((resolve, reject) => {
+                const scriptId = 'cryptojs-cdn';
+                if (document.getElementById(scriptId)) return resolve();
+                const s = document.createElement('script');
+                s.id = scriptId;
+                s.src = 'https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.1.1/crypto-js.min.js';
+                s.crossOrigin = 'anonymous';
+                s.onload = () => resolve();
+                s.onerror = () => reject(new Error('Failed to load CryptoJS fallback'));
+                document.head.appendChild(s);
+            });
+
+            if (window.CryptoJS && typeof window.CryptoJS.SHA256 === 'function') {
+                return window.CryptoJS.SHA256(text).toString(window.CryptoJS.enc.Hex);
+            }
+
+            throw new Error('No SHA-256 implementation available');
+        }
+
+        function showLoginMessage(msg, isError = true) {
+            const el = document.getElementById('loginMsg');
+            el.style.display = msg ? 'block' : 'none';
+            el.style.color = isError ? '#b91c1c' : '#065f46';
+            el.textContent = msg || '';
+        }
+
+        async function attemptLogin() {
+            try {
+                const user = (document.getElementById('loginUsername')||{}).value || '';
+                const pass = (document.getElementById('loginPassword')||{}).value || '';
+                if (!user || !pass) { showLoginMessage('Please enter username and password.'); return; }
+                const userHash = await sha256hex(user.trim().toLowerCase());
+                const passHash = await sha256hex(pass);
+                if (userHash === STORED_USER && passHash === STORED_PASS) {
+                    sessionStorage.setItem('app_logged_in', '1');
+                    document.getElementById('loginOverlay').style.display = 'none';
+                    showLoginMessage('', false);
+                } else {
+                    showLoginMessage('Invalid credentials.');
+                }
+            } catch (err) {
+                console.error('Login error:', err);
+                showLoginMessage('Unable to compute crypto digest in this environment. If you are hosting via file:// or insecure HTTP, open the page over HTTPS or localhost.');
+            }
+        }
+
+        // generateHashes removed (not needed)
+        document.getElementById('loginBtn').addEventListener('click', (e) => { e.preventDefault(); attemptLogin(); });
+
+        // Allow pressing Enter in password field to submit
+        document.getElementById('loginPassword').addEventListener('keydown', (e) => { if (e.key === 'Enter') attemptLogin(); });
+
+        // Persist session during the browser tab session
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                if (sessionStorage.getItem('app_logged_in') === '1') {
+                    document.getElementById('loginOverlay').style.display = 'none';
+                }
+                // Pre-fill placeholders to help the user (optional)
+                const u = document.getElementById('loginUsername');
+                const p = document.getElementById('loginPassword');
+                if (u && !u.value) u.value = 'teamleader';
+                if (p && !p.value) p.value = '';
+            } catch (err) {
+                // ignore storage errors
+            }
+        });
+
+        // NOTE (security): This approach stores only hashes (not plaintext). However, it's important to
+        // understand that any client-side secret or hash included in a webpage can be read by someone
+        // with access to the page (inspect/network). For real protection, move authentication to a
+        // server and never embed secrets in client-side code.
     </script>
 </body>
 </html>
