@@ -139,7 +139,7 @@
             pointer-events: none;
             z-index: -1;
         }
-   
+  
         .login-container {
             display: flex;
             justify-content: center;
@@ -269,12 +269,12 @@
             75% { transform: translateX(10px); }
         }
         .login-footer { margin-top: 30px; font-size: 0.8rem; color: var(--muted); }
-   
+  
         .dashboard-container { display: none; }
         .dashboard-container.active { display: block; animation: fadeIn 0.5s ease; }
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
         .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
-   
+  
         header {
             background: var(--glass-bg);
             backdrop-filter: blur(20px) saturate(180%);
@@ -291,7 +291,7 @@
         .header-content { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px; }
         h1 { font-size: 1.9rem; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
         .subtitle { font-size: 0.9rem; opacity: 0.75; font-weight: 400; line-height: 1.5; color: var(--muted); }
-   
+  
         .user-info {
             display: flex;
             align-items: center;
@@ -323,7 +323,7 @@
             font-size: 1rem;
             box-shadow: var(--avatar-shadow);
         }
-   
+  
         .controls { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 20px; align-items: stretch; }
         .btn {
             padding: 11px 20px;
@@ -377,7 +377,7 @@
             box-shadow: 0 6px 20px rgba(255, 59, 48, 0.35);
         }
         .btn:active { transform: translateY(0) !important; }
-   
+  
         .main-content { display: grid; grid-template-columns: 1fr; gap: 24px; margin-bottom: 30px; }
         .card {
             background: var(--glass-bg);
@@ -407,7 +407,7 @@
             letter-spacing: -0.3px;
         }
         .card-title i { color: var(--primary); font-size: 1.2rem; }
-   
+  
         .day-tabs { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 20px; }
         .day-tab {
             padding: 10px 18px;
@@ -450,8 +450,8 @@
             font-weight: 600;
             box-shadow: 0 2px 8px rgba(52, 199, 89, 0.4);
         }
-   
-        .time-inputs { display: grid; gap: 15px; }
+  
+        .time-inputs { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
         .time-inputs > div { display: flex; flex-direction: column; gap: 8px; }
         .time-inputs label { font-size: 0.9rem; color: var(--muted); font-weight: 500; }
         .time-inputs input {
@@ -483,7 +483,7 @@
             border-radius: 8px;
             border-left: 3px solid var(--danger);
         }
-   
+  
         #selectionInfo {
             margin-top: 20px;
             padding: 14px 16px;
@@ -497,13 +497,13 @@
             color: var(--body-color);
             box-shadow: 0 2px 8px rgba(74, 144, 226, 0.1);
         }
-   
+  
         .volunteers-list { max-height: 500px; overflow-y: auto; }
         .volunteers-list::-webkit-scrollbar { width: 8px; }
         .volunteers-list::-webkit-scrollbar-track { background: var(--scroll-track); border-radius: 10px; }
         .volunteers-list::-webkit-scrollbar-thumb { background: var(--scroll-thumb); border-radius: 10px; }
         .volunteers-list::-webkit-scrollbar-thumb:hover { background: var(--scroll-thumb-hover); }
-   
+  
         .compact-table {
             width: 100%;
             border-collapse: collapse;
@@ -536,7 +536,7 @@
             cursor: pointer;
             transform: scale(1.01);
         }
-   
+  
         .volunteer-item {
             display: flex;
             justify-content: space-between;
@@ -575,11 +575,11 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(52, 199, 89, 0.35);
         }
-   
+  
         .empty-state { text-align: center; padding: 60px 20px; color: var(--muted); }
         .empty-state i { font-size: 3.5rem; margin-bottom: 20px; color: var(--empty-i); }
         .empty-state p { font-size: 1rem; margin-top: 10px; }
-   
+  
         .loading { text-align: center; padding: 40px; color: var(--primary); }
         .loading-spinner {
             width: 48px;
@@ -591,7 +591,7 @@
             margin: 0 auto 20px;
         }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-   
+  
         footer {
             text-align: center;
             padding: 25px;
@@ -602,9 +602,9 @@
         }
         footer a { color: var(--primary); text-decoration: none; transition: color 0.3s; }
         footer a:hover { color: var(--footer-a-hover); text-decoration: underline; }
-   
+  
         .print-selection { display: none; }
-   
+  
         .controls .input-group {
             display: flex;
             align-items: stretch;
@@ -682,7 +682,7 @@
         .controls .input-group .search-btn:active i {
             transform: scale(0.9);
         }
-   
+  
         .modal {
             display: none;
             position: fixed;
@@ -729,7 +729,7 @@
             cursor: pointer;
         }
         .close:hover, .close:focus { color: var(--close-hover); transform: rotate(90deg); }
-   
+  
         #profileName {
             font-size: 1.7rem;
             font-weight: 700;
@@ -770,7 +770,7 @@
             margin-bottom: 6px;
             font-weight: 600;
         }
-   
+  
         @media print {
             body * { visibility: hidden; color: #000 !important; background: #fff !important; }
             header, .controls, .card:first-child, footer, #selectionInfo { display: none !important; }
@@ -787,16 +787,439 @@
             .volunteers-list { max-height: none !important; overflow: visible !important; height: auto !important; }
             @page { margin: 1cm; }
         }
-   
-        @media (min-width: 1024px) { .main-content { grid-template-columns: 1fr 2fr; } }
+  
+        /* Desktop styles (unchanged) */
+        @media (min-width: 1024px) {
+            .main-content { grid-template-columns: 1fr 2fr; }
+        }
+        /* ============================================ */
+        /* MOBILE-SPECIFIC STYLES (NEW) */
+        /* ============================================ */
         @media (max-width: 768px) {
-            .container { padding: 15px; }
-            header { padding: 20px; }
-            h1 { font-size: 1.5rem; }
-            .controls { gap: 10px; }
-            .controls .input-group input { min-width: 150px; }
-            .controls .input-group .search-btn { padding: 0 14px; }
-            .controls .input-group .search-btn i { font-size: 0.95rem; }
+            /* Login page mobile optimization */
+            .login-container {
+                padding: 15px;
+            }
+            .login-card {
+                padding: 30px 20px;
+                border-radius: 20px;
+                max-width: 100%;
+            }
+            .logo-container {
+                max-width: 140px;
+                margin-bottom: 20px;
+            }
+            .login-subtitle {
+                font-size: 0.85rem;
+                margin-bottom: 25px;
+            }
+            .login-card input {
+                padding: 13px 14px 13px 42px;
+                font-size: 0.9rem;
+            }
+            .login-card button {
+                padding: 13px;
+                font-size: 0.95rem;
+            }
+            /* Container and general layout */
+            .container {
+                padding: 12px;
+            }
+           
+            /* Header mobile optimization */
+            header {
+                padding: 18px 16px;
+                margin-bottom: 16px;
+                border-radius: 16px;
+            }
+           
+            .header-content {
+                gap: 15px;
+            }
+           
+            h1 {
+                font-size: 1.4rem;
+                margin-bottom: 6px;
+                letter-spacing: -0.3px;
+            }
+           
+            .subtitle {
+                font-size: 0.8rem;
+                line-height: 1.4;
+            }
+           
+            /* User info mobile styling */
+            .user-info {
+                padding: 8px 14px;
+                gap: 8px;
+                border-radius: 50px;
+            }
+           
+            .user-avatar {
+                width: 32px;
+                height: 32px;
+                font-size: 0.9rem;
+            }
+           
+            .user-details {
+                display: flex;
+                flex-direction: column;
+            }
+           
+            .user-name {
+                font-size: 0.85rem;
+                font-weight: 600;
+            }
+           
+            /* Controls mobile optimization */
+            .controls {
+                gap: 8px;
+                margin-top: 15px;
+            }
+           
+            .btn {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+                height: auto;
+                min-height: 44px;
+                flex: 1 1 calc(50% - 4px);
+                justify-content: center;
+            }
+           
+            .btn i {
+                font-size: 0.9rem;
+            }
+           
+            /* Theme and logout buttons side by side */
+            #themeToggle,
+            .btn-logout {
+                flex: 0 0 auto;
+                min-width: 44px;
+                padding: 10px;
+            }
+           
+            /* Search input mobile */
+            .controls .input-group {
+                flex: 1 1 100%;
+                height: auto;
+                min-height: 44px;
+            }
+           
+            .controls .input-group input {
+                min-width: unset;
+                padding: 12px 14px;
+                font-size: 0.85rem;
+            }
+           
+            .controls .input-group .search-btn {
+                padding: 0 14px;
+                min-width: 44px;
+            }
+           
+            .controls .input-group .search-btn i {
+                font-size: 0.95rem;
+            }
+           
+            /* Main content mobile */
+            .main-content {
+                gap: 16px;
+                margin-bottom: 20px;
+            }
+           
+            .card {
+                padding: 18px;
+                border-radius: 16px;
+            }
+           
+            .card:hover {
+                transform: none;
+            }
+           
+            .card-title {
+                font-size: 1.15rem;
+                margin-bottom: 16px;
+                gap: 8px;
+            }
+           
+            .card-title i {
+                font-size: 1.05rem;
+            }
+           
+            /* Day tabs mobile - horizontal scroll */
+            .day-tabs {
+                display: flex;
+                gap: 8px;
+                flex-wrap: nowrap;
+                overflow-x: auto;
+                overflow-y: hidden;
+                margin-bottom: 16px;
+                padding-bottom: 8px;
+                -webkit-overflow-scrolling: touch;
+                scrollbar-width: thin;
+            }
+           
+            .day-tabs::-webkit-scrollbar {
+                height: 4px;
+            }
+           
+            .day-tabs::-webkit-scrollbar-track {
+                background: var(--scroll-track);
+                border-radius: 4px;
+            }
+           
+            .day-tabs::-webkit-scrollbar-thumb {
+                background: var(--scroll-thumb);
+                border-radius: 4px;
+            }
+           
+            .day-tab {
+                padding: 10px 16px;
+                font-size: 0.85rem;
+                border-radius: 10px;
+                flex-shrink: 0;
+                min-width: fit-content;
+            }
+           
+            .day-tab:hover {
+                transform: translateY(-1px);
+            }
+           
+            .day-tab.today::after {
+                font-size: 0.6rem;
+                padding: 2px 6px;
+            }
+           
+            /* Time inputs mobile */
+            .time-inputs {
+                gap: 12px;
+            }
+           
+            .time-inputs > div {
+                gap: 6px;
+            }
+           
+            .time-inputs label {
+                font-size: 0.85rem;
+            }
+           
+            .time-inputs input {
+                padding: 11px 12px;
+                font-size: 0.9rem;
+            }
+           
+            .time-error {
+                font-size: 0.8rem;
+                padding: 8px 10px;
+                margin-top: 6px;
+            }
+           
+            /* Selection info mobile */
+            #selectionInfo {
+                padding: 12px 14px;
+                font-size: 0.85rem;
+                margin-top: 16px;
+            }
+           
+            /* Volunteers list mobile */
+            .volunteers-list {
+                max-height: 450px;
+            }
+           
+            .volunteers-list::-webkit-scrollbar {
+                width: 6px;
+            }
+           
+            /* Compact table mobile - convert to cards */
+            /* Removed display: none for .compact-table */
+           
+            /* Show volunteer items as cards on mobile */
+            .volunteer-item {
+                flex-direction: column;
+                align-items: flex-start;
+                padding: 14px;
+                gap: 12px;
+            }
+           
+            .volunteer-item:hover {
+                transform: none;
+            }
+           
+            .volunteer-info {
+                width: 100%;
+            }
+           
+            .volunteer-info h4 {
+                font-size: 0.95rem;
+                margin-bottom: 4px;
+            }
+           
+            .volunteer-info p {
+                font-size: 0.8rem;
+            }
+           
+            .volunteer-phone {
+                width: 100%;
+                text-align: center;
+                padding: 10px 16px;
+                font-size: 0.85rem;
+                display: block;
+            }
+           
+            /* Empty state mobile */
+            .empty-state {
+                padding: 40px 15px;
+            }
+           
+            .empty-state i {
+                font-size: 2.5rem;
+                margin-bottom: 15px;
+            }
+           
+            .empty-state p {
+                font-size: 0.9rem;
+                margin-top: 8px;
+            }
+           
+            /* Loading mobile */
+            .loading {
+                padding: 30px 15px;
+            }
+           
+            .loading-spinner {
+                width: 40px;
+                height: 40px;
+                border-width: 3px;
+                margin-bottom: 15px;
+            }
+           
+            .loading p {
+                font-size: 0.9rem;
+            }
+           
+            /* Modal mobile */
+            .modal-content {
+                margin: 10% auto;
+                padding: 25px 20px;
+                width: 95%;
+                max-width: 95%;
+                border-radius: 20px;
+            }
+           
+            .close {
+                font-size: 28px;
+                margin-top: -8px;
+                margin-right: -8px;
+            }
+           
+            #profileName {
+                font-size: 1.4rem;
+                margin-bottom: 10px;
+            }
+           
+            #profileID,
+            #profileDept {
+                font-size: 0.9rem;
+                margin-bottom: 6px;
+            }
+           
+            #profileSchedule {
+                margin-top: 20px;
+            }
+           
+            #profileSchedule h3 {
+                font-size: 1.1rem;
+                margin-bottom: 14px;
+            }
+           
+            #profileSchedule li {
+                padding: 12px;
+                margin-bottom: 10px;
+                font-size: 0.85rem;
+            }
+           
+            #profileSchedule li strong {
+                margin-bottom: 4px;
+                font-size: 0.9rem;
+            }
+           
+            /* Footer mobile */
+            footer {
+                padding: 20px 15px;
+                font-size: 0.8rem;
+                margin-top: 30px;
+            }
+           
+            footer p {
+                margin-top: 6px;
+            }
+           
+            /* Ensure mobile table display as cards */
+            @supports (-webkit-touch-callout: none) {
+                .compact-table {
+                    display: none !important;
+                }
+            }
+        }
+        /* Extra small devices (phones in portrait mode) */
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.25rem;
+            }
+           
+            .btn {
+                font-size: 0.8rem;
+                padding: 9px 14px;
+            }
+           
+            .card-title {
+                font-size: 1.05rem;
+            }
+           
+            .day-tab {
+                padding: 9px 14px;
+                font-size: 0.8rem;
+            }
+           
+            .volunteer-info h4 {
+                font-size: 0.9rem;
+            }
+           
+            .volunteer-info p {
+                font-size: 0.75rem;
+            }
+        }
+        /* Landscape mode optimization for mobile */
+        @media (max-width: 768px) and (orientation: landscape) {
+            .login-container {
+                padding: 10px;
+            }
+           
+            .login-card {
+                padding: 20px 18px;
+                max-height: 90vh;
+                overflow-y: auto;
+            }
+           
+            .logo-container {
+                max-width: 100px;
+                margin-bottom: 12px;
+            }
+           
+            header {
+                padding: 14px 16px;
+            }
+           
+            h1 {
+                font-size: 1.2rem;
+            }
+           
+            .card {
+                padding: 16px;
+            }
+           
+            .volunteers-list {
+                max-height: 300px;
+            }
         }
     </style>
 </head>
@@ -885,7 +1308,7 @@
             </div>
             <footer>
                 <p><i class="fas fa-comment-alt"></i> Feedback or Complaints? <a href="https://forms.gle/5C8rLt4VvbVZM4SNA" target="_blank">Submit here</a></p>
-                <p style="margin-top:8px; opacity:0.7;"><i class="far fa-copyright"></i> 2026 AIUB Social Welfare Club - SHOMOY</p>
+                <p style="margin-top:8px; opacity:0.7;"><i class="far fa-copyright"></i> 2025 AIUB Social Welfare Club - SHOMOY</p>
             </footer>
         </div>
     </div>
@@ -913,7 +1336,7 @@
         let cacheTimestamp = null;
         let isFromCache = false;
         let cacheUpdateInterval = null;
-    
+   
         function timeToMin(t) {
             if (!t) return NaN;
             t = t.trim().toUpperCase().replace(/\./g, ':');
@@ -936,7 +1359,7 @@
         function overlap(s1, e1, s2, e2) { const [a,b,c,d] = [timeToMin(s1), timeToMin(e1), timeToMin(s2), timeToMin(e2)]; return !(b <= c || a >= d); }
         function esc(s) { return (s || '').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
         function fmtPhone(p) { if (!p || p === 'N/A') return 'N/A'; let n = p.replace(/\D/g,''); if (n.length === 10) n = '0' + n; if (n.length === 11 && n[0]==='0') return n.slice(0,4)+'-'+n.slice(4,8)+'-'+n.slice(8); return p; }
-    
+   
         function getFreeSlots(slots) {
             if (!slots || slots.length === 0) return ['No schedule information'];
             if (slots[0] === 'No classes') return [`${formatToAMPM(DAY_START)} – ${formatToAMPM(DAY_END)}`];
@@ -960,7 +1383,7 @@
             }
             return free.length ? free : ['No free time'];
         }
-    
+   
         // Login
         document.getElementById('loginForm').addEventListener('submit', e => {
             e.preventDefault();
@@ -979,9 +1402,9 @@
                 document.getElementById('loginError').style.display = 'block';
             }
         });
-    
+   
         document.getElementById('logoutBtn').addEventListener('click', () => location.reload());
-    
+   
         // Data loading
         async function loadData(forceRefresh = false) {
             if (forceRefresh) {
@@ -1015,7 +1438,7 @@
                 document.getElementById('dataStatus').innerHTML = `<div style="color:#ff3b30;text-align:center;padding:20px;"><i class="fas fa-exclamation-triangle" style="font-size:2rem;"></i><p>Failed to load data.<br>Check internet or sheet publish settings.</p></div>`;
             }
         }
-    
+   
         function updateCacheIndicator(timestamp, isLive) {
             const el = document.getElementById('dataSource');
             if (isLive) {
@@ -1026,7 +1449,7 @@
                 el.innerHTML = '<i class="fas fa-database"></i> Data from Cache • Cached ' + agoText;
             }
         }
-    
+   
         function parseCSV(csv) {
             const lines = csv.split(/\r?\n/).filter(l => l.trim());
             if (lines.length < 2) return [];
@@ -1056,12 +1479,12 @@
                 };
             }).filter(v => v.name && v.studentId);
         }
-    
+   
         function parseSlots(str) {
             if (!str || str.toLowerCase().includes('no class')) return ['No classes'];
             return str.split(',').map(s => s.trim()).filter(s => s);
         }
-    
+   
         function renderDayTabs() {
             const today = new Date();
             const dayIndex = today.getDay();
@@ -1070,9 +1493,9 @@
                 `<div class="day-tab ${selectedDay === day ? 'selected' : ''} ${day === todayName ? 'today' : ''}" onclick="selectDay('${day}')">${day.substr(0,3)}</div>`
             ).join('');
         }
-    
+   
         function selectDay(day) { selectedDay = day; renderDayTabs(); update(); }
-    
+   
         function update() {
             const start = document.getElementById('startTimeInput').value;
             const end = document.getElementById('endTimeInput').value;
@@ -1101,62 +1524,64 @@
             }
             renderResults();
         }
-    
+   
         function renderResults() {
             const query = document.getElementById('searchInput').value.toLowerCase();
             const start = document.getElementById('startTimeInput').value;
             const end = document.getElementById('endTimeInput').value;
             const hasSelection = selectedDay && start && end && timeToMin(start) < timeToMin(end);
             const container = document.getElementById('volunteersList');
-        
+       
             if (!hasSelection) {
                 container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-alt"></i><p>Select day and time to find available volunteers</p></div>`;
                 return;
             }
-        
+       
             const list = available;
             const filtered = list.filter(v => v.name.toLowerCase().includes(query) || v.studentId.includes(query));
-        
+       
             if (filtered.length === 0) {
                 container.innerHTML = `<div class="empty-state"><i class="fas fa-user-slash"></i><p>No volunteers found</p><p>Select day and time to find available volunteers</p></div>`;
                 return;
             }
-        
+       
             const now = new Date();
             const exportDate = now.toLocaleDateString('default', { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
-        
+       
             let printHeader = `<div class="print-header" style="display:none;">
                 <h1>AIUB Social Welfare Club - SHOMOY</h1>
                 <p>Exported By: ${esc(currentUser.displayName)}</p>
                 <p>Export Date: ${exportDate}</p>
                 <p>Export Time: ${new Date().toLocaleTimeString()}</p>`;
-        
+       
             if (selectedDay && start && end) {
                 printHeader += `
                 <p>Export Day: ${esc(selectedDay)}</p>
                 <p>Time Slot: ${formatToAMPM(start)} – ${formatToAMPM(end)}</p>`;
             }
-        
+       
             printHeader += `
                 <p>Available Volunteers:</p>
             </div>`;
-        
-            let content = filtered.map(v =>
-                `<div class="volunteer-item" onclick="showProfile('${esc(v.studentId)}')">
-                    <div class="volunteer-info"><h4>${esc(v.name)}</h4><p>${esc(v.department)} • ${esc(v.studentId)}</p></div>
-                    <a href="tel:${v.phone.replace(/\D/g,'')}" class="volunteer-phone">${fmtPhone(v.phone)}</a>
-                </div>`
-            ).join('');
-        
-            if (hasSelection) {
-                content = `<table class="compact-table"><thead><tr><th>Name</th><th>ID</th><th>Phone</th></tr></thead><tbody>${filtered.map(v =>
-                    `<tr onclick="showProfile('${esc(v.studentId)}')"><td>${esc(v.name)}</td><td>${esc(v.studentId)}</td><td><a href="tel:${v.phone.replace(/\D/g,'')}" class="volunteer-phone">${fmtPhone(v.phone)}</a></td></tr>`
+       
+            const isMobile = window.matchMedia("(max-width: 768px)").matches;
+            let content;
+            if (isMobile) {
+                content = filtered.map(v =>
+                    `<div class="volunteer-item" onclick="showProfile('${esc(v.studentId)}')">
+                        <div class="volunteer-info"><h4>${esc(v.name)}</h4><p>${esc(v.department)} • ${esc(v.studentId)}</p></div>
+                        <a href="tel:${v.phone.replace(/\D/g,'')}" class="volunteer-phone">${fmtPhone(v.phone)}</a>
+                    </div>`
+                ).join('');
+            } else {
+                content = `<table class="compact-table"><thead><tr><th>Name</th><th>Department</th><th>ID</th><th>Phone</th></tr></thead><tbody>${filtered.map(v =>
+                    `<tr onclick="showProfile('${esc(v.studentId)}')"><td>${esc(v.name)}</td><td>${esc(v.department)}</td><td>${esc(v.studentId)}</td><td><a href="tel:${v.phone.replace(/\D/g,'')}" class="volunteer-phone">${fmtPhone(v.phone)}</a></td></tr>`
                 ).join('')}</tbody></table>`;
             }
-        
+       
             container.innerHTML = printHeader + content;
         }
-    
+   
         function showProfile(id) {
             const v = volunteers.find(v => v.studentId === id);
             if (!v) return;
@@ -1176,29 +1601,29 @@
             }).join('') + '</ul>';
             document.getElementById('profileModal').style.display = 'block';
         }
-    
+   
         function init() {
             const today = new Date();
             const dayIndex = today.getDay();
             selectedDay = days[dayIndex === 0 ? 0 : dayIndex - 1];
             renderDayTabs();
             loadData();
-        
+       
             if (cacheUpdateInterval) clearInterval(cacheUpdateInterval);
             if (isFromCache) {
                 cacheUpdateInterval = setInterval(() => updateCacheIndicator(cacheTimestamp, false), 60000);
             }
-        
+       
             document.getElementById('startTimeInput').addEventListener('change', update);
             document.getElementById('endTimeInput').addEventListener('change', update);
             document.getElementById('searchInput').addEventListener('input', renderResults);
             document.getElementById('searchBtn').addEventListener('click', renderResults);
-        
+       
             document.getElementById('refreshBtn').addEventListener('click', () => {
                 document.getElementById('dataStatus').style.display = 'block';
                 loadData(true);
             });
-        
+       
             document.getElementById('clearBtn').addEventListener('click', () => {
                 selectedDay = days[today.getDay() === 0 ? 0 : today.getDay() - 1];
                 document.getElementById('startTimeInput').value = '08:00';
@@ -1209,9 +1634,9 @@
                 renderDayTabs();
                 update();
             });
-        
+       
             document.getElementById('printBtn').addEventListener('click', () => window.print());
-        
+       
             const modal = document.getElementById('profileModal');
             const closeBtn = document.getElementById('closeModal');
             closeBtn.onclick = () => { modal.style.display = 'none'; };
@@ -1233,7 +1658,7 @@
                 localStorage.setItem('theme', isDark ? 'dark' : 'light');
             });
         }
-    
+   
         document.addEventListener('contextmenu', e => e.preventDefault());
         document.addEventListener('keydown', e => {
             if (e.keyCode === 123 || (e.ctrlKey && e.shiftKey && [73,67,74].includes(e.keyCode)) || (e.ctrlKey && e.key === 'u'))
